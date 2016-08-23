@@ -18,7 +18,6 @@ public class RackDAO extends GenericDAO{
 	
 	public List<Rack> encontrarRacksPorLocationIdDescricao(int locationId, String descricao){
 		String q = "select r from Rack r where r.locationId = '"+locationId+"' and (r.rowName like '%"+descricao+"%' or r.name like '%"+descricao+"%')";
-		Rack r = null;
     	List<Rack> lista = em.createQuery(q.toString(), Rack.class).getResultList();
     	return lista;
 	}	
