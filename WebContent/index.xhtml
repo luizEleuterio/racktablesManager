@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+	
+    <h:head>
+        <title>Racktables Manager - Index</title>
+    </h:head>
+    <h:body>
+    	<p:panel header="Racktables Manager - Importação de informações do arquivo '.ods'">
+	   		<h:form enctype="multipart/form-data">
+	   			<p:growl id="messages" showDetail="true" />
+	            
+            	<p:panel menuTitle="Ler arquivo" style="border: none;" header="Ler e selecionar arquivo:">	   		
+		   			<p:outputLabel for="linha" value="Ler dados a partir da Linha (preencha este campo antes de escolher o arquivo):" />
+		       		<p:inputText id="linha" value="#{switchPlanilhaView.linhaIncial}" required="true">
+		       			 <p:ajax update="linha"/>
+		       		</p:inputText>
+		       		<p:fileUpload id="fileUpload" fileUploadListener="#{switchPlanilhaView.handleFileUpload}" mode="advanced"
+	                update="messages, serie, tombo, local, obs" auto="true" allowTypes="/(\.|\/)(ods)$/" label="Selecionar arquivo '.ods'" />	 
+       			</p:panel>
+       			<p:panel header="Informações dos Switches">
+					<p:panelGrid columns="2" style='height: 100%;width: 100%;border: none;'>
+						<p:outputLabel for="modelo" value="Modelo:" />
+		       			<p:selectOneMenu id="modelo" value="#{switchPlanilhaView.camposSwitch.modeloId}" style="width:280px" panelStyle="width:300px" filter="true" filterMatchMode="startsWith">
+			           		<f:selectItems value="#{switchPlanilhaView.modelosSwitch}" var="modelo" itemValue="#{modelo.dictKey}" itemLabel="#{modelo.dictValue}" />
+			       		</p:selectOneMenu>
+		       			
+						
+						<p:outputLabel for="contrato" value="Contrato:" />
+		       			<p:inputText id="contrato" value="#{switchPlanilhaView.camposSwitch.contratoTrt}"/>
+					
+						<p:outputLabel for="pgctpa" value="PG/CT/PA:" />
+		       			<p:inputText id="pgctpa" value="#{switchPlanilhaView.camposSwitch.pg_ct_pa}"/>
+					
+						<p:outputLabel for="fornecedor" value="Fornecedor:" />
+		       			<p:inputText id="fornecedor" value="#{switchPlanilhaView.camposSwitch.fornecedor}"/>
+					
+			    		<p:outputLabel for="serie" value="Serie:" />
+			       		<p:selectOneMenu id="serie" value="#{switchPlanilhaView.camposSwitch.serie}" style="width:125px">
+			           		<f:selectItems value="#{switchPlanilhaView.nomesColunasPlanilha}" />
+			       		</p:selectOneMenu>
+			    		
+			    		<p:outputLabel for="tombo" value="Tombo:" />
+			       		<p:selectOneMenu id="tombo" value="#{switchPlanilhaView.camposSwitch.tombo}" style="width:125px">
+			           		<f:selectItems value="#{switchPlanilhaView.nomesColunasPlanilha}" />
+			       		</p:selectOneMenu>
+			       		
+			       		
+			       		<p:outputLabel for="local" value="Localização:" />
+			       		<p:selectOneMenu id="local" value="#{switchPlanilhaView.camposSwitch.localizacao}" style="width:125px">
+			           		<f:selectItems value="#{switchPlanilhaView.nomesColunasPlanilha}" />
+			       		</p:selectOneMenu>
+			       		
+			       		<p:outputLabel for="obs" value="Observação:" />
+			       		<p:selectOneMenu  id="obs" value="#{switchPlanilhaView.camposSwitch.observacoes}" style="width:125px">
+			           		<f:selectItems value="#{switchPlanilhaView.nomesColunasPlanilha}"/>
+			       		</p:selectOneMenu>
+			       		
+			       		<p:commandButton id="visualizar" value="Visualizar" actionListener="#{switchPlanilhaView.visualizar}" update="preview, importar" widgetVar="vis"/>
+			       		<p:commandButton id="importar" value="Importar" actionListener="#{switchPlanilhaView.importar}" disabled="#{switchPlanilhaView.switches == null}" onclick="PF('pbAjax').start();PF('imp').disable();PF('vis').disable()" widgetVar="imp"/>
+					</p:panelGrid>
+				</p:panel>
+				<p:progressBar widgetVar="pbAjax" ajax="true" value="#{switchPlanilhaView.contador}" labelTemplate="{value}%"  global="false">
+       				 <p:ajax event="complete" listener="#{progressBarView.onComplete}" update="messages" oncomplete="PF('imp').enable();PF('vis').enable();PF('pbAjax').cancel()"/>
+    			</p:progressBar>
+				
+				
+				<p:dataTable id="preview" var="ns" value="#{switchPlanilhaView.switches}" resizableColumns="true" style='height: 100%;width: 100%;'>
+						<p:column headerText="Série">
+        					<h:outputText value="#{ns.serie}" />
+    					</p:column>
+					    <p:column headerText="Tombo">
+					        <h:outputText value="#{ns.tombo}" />
+					    </p:column>
+					    <p:column headerText="Localização">
+					        <h:outputText value="#{ns.localizacao}" />
+					    </p:column>
+					    <p:column headerText="OBS">
+					        <h:outputText value="#{ns.observacoes}" />
+					    </p:column>
+				</p:dataTable>
+	    	</h:form>
+    	</p:panel>
+    </h:body>
+</html>

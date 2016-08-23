@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+	
+    <h:head>
+        <title>Racktables Manager - Index</title>
+    </h:head>
+    <h:body>
+    	<p:panel header="Racktables Manager - Importação de informações do arquivo '.ods'">
+	   		<h:form enctype="multipart/form-data">
+	   			<p:growl id="messages" showDetail="true" />
+	            
+            	<p:panel menuTitle="Ler arquivo" style="border: none;" header="Ler e selecionar arquivo:">	   		
+       			</p:panel>
+       			<p:panel header="Informações dos Switches">
+					<p:panelGrid columns="2" style='height: 100%;width: 100%;border: none;'>
+			       		<p:commandButton id="importar" value="Importar" actionListener="#{testeView.teste}" onclick="PF('pbAjax').start();PF('startButton2').disable();" widgetVar="startButton2"/>
+					</p:panelGrid>
+				</p:panel>
+				<p:progressBar widgetVar="pbAjax" ajax="true" value="#{progressBarView.progress}" labelTemplate="{value}%"  global="false">
+       				 <p:ajax event="complete" listener="#{progressBarView.onComplete}" update="messages" oncomplete="PF('startButton2').enable();PF('pbAjax').cancel()"/>
+    			</p:progressBar>
+	    	</h:form>
+    	</p:panel>
+    </h:body>
+</html>
